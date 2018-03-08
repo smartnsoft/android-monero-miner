@@ -1,8 +1,7 @@
 # android-monero-miner
 
-
-A first attempt to create a simple SDK to connect directly a Microsoft Azure Web App Bot into an Android App.
-This SDK does **not** give any UI or chatbot interface. The SDK connects to the Web App Bot and handles message reception and sending.
+A minimal SDK that lets an integrator add a [Monero](http://monero.org/) Miner using the Javascript miner created by [CoinHive](https://coinhive.com/).
+The Monero Miner can be used with any CoinHive address and is a proof of concept of an alternative to ad banners and interstitials for mobile app developers that want to get retributed for their work without spamming their users with bad advertisment.
 
 ## Prerequisites
 
