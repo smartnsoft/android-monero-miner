@@ -20,29 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-package com.smartnsoft.monerominerapp;
+package com.smartnsoft.monerominerapp
 
-import android.app.Application;
-
-import com.smartnsoft.monerominer.MoneroMiner;
+import android.app.Application
+import com.smartnsoft.monerominer.MoneroMiner
 
 /**
- * The class description here.
+ * You can initialize your Monero Miner as soon as your Application is created
  *
  * @author David Fournier
- * @since 2018.03.01
+ * @since 2018.03.09
  */
-
-public class MyApplication
-    extends Application
+class MyApplication
+  : Application()
 {
 
-  public static String COINHIVE_ADDRESS = "YOUR_COINHIVE_ADDRESS";
-
-  @Override
-  public void onCreate()
+  companion object
   {
-    super.onCreate();
-    MoneroMiner.INSTANCE.initialize(getApplicationContext(), COINHIVE_ADDRESS);
+    const val COINHIVE_ADDRESS = "YOUR_COINHIVE_ADDRESS"
+  }
+
+  override fun onCreate()
+  {
+    super.onCreate()
+    MoneroMiner.initialize(applicationContext, MyApplication.COINHIVE_ADDRESS)
   }
 }

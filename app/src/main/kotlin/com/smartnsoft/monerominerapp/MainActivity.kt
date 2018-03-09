@@ -27,8 +27,21 @@ import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import com.smartnsoft.monerominer.MoneroMiner
 
-class MainActivity : AppCompatActivity()
+/**
+ * A simple Activity that shows how to start the Monero Miner and change its parameters
+ *
+ * @author David Fournier
+ * @since 2018.03.09
+ */
+class MainActivity
+  : AppCompatActivity()
 {
+
+  companion object
+  {
+
+    private const val PERIODICITY = 5000L
+  }
 
   override fun onCreate(savedInstanceState: Bundle?)
   {
@@ -44,12 +57,10 @@ class MainActivity : AppCompatActivity()
     {
       override fun run()
       {
-        runOnUiThread {
-          MoneroMiner.throttle = if (i++ % 2 == 0) 20 else 80
-          handler.postDelayed(this, 2000)
-        }
+        MoneroMiner.throttle = i++ % 2 * 60 + 20
+        handler.postDelayed(this, PERIODICITY)
       }
-    }, 5000)
+    }, PERIODICITY)
 
   }
 }
