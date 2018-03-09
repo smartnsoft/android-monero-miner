@@ -1,5 +1,8 @@
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
+apply plugin: "com.jfrog.bintray"
+apply plugin: "maven"
+apply plugin: "maven-publish"
 
 android
 {
@@ -35,4 +38,138 @@ dependencies
 {
   implementation("com.android.support:appcompat-v7:27.1.0")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}")
+}
+
+
+task sourcesJar(type: Jar) {
+  classifier = "sources"
+  from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+  title = "Android Monero Miner"
+  description "Javadoc for the Android Monero Miner"
+  source = android.sourceSets.main.java.srcDirs
+
+  options.charSet = "UTF-8"
+  options.overview = "src/main/javadoc/overview.html"
+  options.links = ["http://docs.oracle.com/javase/7/docs/api/", "http://d.android.com/reference/"]
+
+  classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+  failOnError = false
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = "javadoc"
+  from javadoc.destinationDir
+}
+
+artifacts
+{
+  archives javadocJar
+  archives sourcesJar
+}
+
+def pomConfig = {
+  licenses
+  {
+    license
+    {
+      name "MIT License (MIT)"
+      url "https://opensource.org/licenses/MIT"
+      distribution "repo"
+    }
+  }
+}
+
+publishing
+{
+  publications
+  {
+    ReleasePublication(MavenPublication)
+    {
+      artifact sourcesJar
+      artifact javadocJar
+      groupId "com.smartnsoft"
+      artifactId "monerominer"
+      version android.defaultConfig.versionName
+
+      pom.withXml
+      {
+        def root = asNode()
+        root.appendNode("description", "Monero Miner is an Android implementation of the Javascript CoinHive Moner miner.")
+        root.appendNode("name", "monerominer")
+        root.appendNode("url", "https://github.com/smartnsoft/android-monero-miner")
+        root.children().last() + pomConfig
+      }
+    }
+  }
+}
+
+//https://gist.github.com/bugs84/b7887fb5d7f9f2d484b8
+publishing.publications.all
+{
+  pom.withXml
+  {
+    asNode().dependencies."*".findAll()
+    {
+      it.scope.text() == "runtime" && project.configurations.compile.allDependencies.find { dep ->
+        dep.name == it.artifactId.text()
+      }
+    }.each
+    {
+      it.scope*.value = "compile"
+    }
+  }
+}
+
+bintray
+{
+  publications = ["ReleasePublication"]
+
+  pkg
+  {
+    repo = "maven"
+    name = "monerominer"
+    userOrg = "smartnsoft"
+    licenses = ["MIT"]
+    vcsUrl = "https://github.com/smartnsoft/android-monero-miner.git"
+    publish = true
+
+    version
+    {
+      name = android.defaultConfig.versionName
+      desc = "Monero Miner is an Android implementation of the Javascript CoinHive Moner miner."
+      released = new Date()
+      vcsTag = "v" + android.defaultConfig.versionName
+    }
+  }
+}
+
+uploadArchives
+{
+  repositories
+  {
+    mavenDeployer
+    {
+      repository(url: "https://api.bintray.com/maven/smartnsoft/maven/monerominer/;publish=1")
+      {
+        authentication(userName: bintrayUsername, password: bintrayKey)
+      }
+
+      snapshotRepository(url: nexusSnapshotUrl)
+      {
+        authentication(userName: nexusUsername, password: nexusPassword)
+      }
+
+      pom.project
+      {
+        name "monerominer"
+        groupId "com.smartnsoft"
+        artifactId "monerominer"
+        version android.defaultConfig.versionName
+        packaging "aar"
+      }
+    }
+  }
 }
