@@ -49,6 +49,14 @@ MoneroMiner.setThrottle(20);
 
 _NOTE: Changing one of the parameters will cause the Monero Miner to stop and get restarted._
 
+## Download
+
+### Gradle
+
+```groovy
+implementation("com.smartnsoft:monerominer:0.1")
+```
+
 ## Further improvements
 
 For now, the integrator must take care of stopping the Miner when the app goes to the background. A further improvement may be to make this automatically. Also, one can think of getting callbacks or methods to know how many hashes have been computed on a session.
