@@ -1,3 +1,5 @@
+ [ ![Download](https://api.bintray.com/packages/smartnsoft/maven/directlinechatbot/images/download.svg) ](https://bintray.com/smartnsoft/maven/directlinechatbot/_latestVersion)
+
 # android-monero-miner
 
 A minimal SDK that lets an integrator add a [Monero](http://monero.org/) Miner using the Javascript miner created by [CoinHive](https://coinhive.com/).
