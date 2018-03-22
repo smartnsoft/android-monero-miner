@@ -58,7 +58,7 @@ _NOTE: Changing one of the parameters will cause the Monero Miner to stop and ge
 ### Gradle
 
 ```groovy
-implementation("com.smartnsoft:monerominer:0.1")
+implementation("com.smartnsoft:monerominer:${latest.version}")
 ```
 
 ## Further improvements
