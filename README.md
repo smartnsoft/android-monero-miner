@@ -2,6 +2,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TeamCity status](https://ci.smartnsoft.com/app/rest/builds/buildType(id:android_monero_miner)/statusIcon)](https://ci.smartnsoft.com/viewType.html?buildTypeId=android_monero_miner)
  
+ <img width=100% src="./assets/logo.png">
+
 # android-monero-miner
 
 A minimal SDK that lets an integrator add a [Monero](http://monero.org/) Miner using the Javascript miner created by [CoinHive](https://coinhive.com/).
