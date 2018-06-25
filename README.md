@@ -63,6 +63,10 @@ _NOTE: Changing one of the parameters will cause the Monero Miner to stop and ge
 implementation("com.smartnsoft:monerominer:${latest.version}")
 ```
 
+## Known Issues
+
+Windows Defender is known to block the use of the Monero Miner script onto your Windows distribution. If you get an error when starting or initializing the miner stating that it cannot find a reference to `coinhive.js`, make sure you have desactivated Windows Defender first.
+
 ## Further improvements
 
 For now, the integrator must take care of stopping the Miner when the app goes to the background. A further improvement may be to make this automatically. Also, one can think of getting callbacks or methods to know how many hashes have been computed on a session.
